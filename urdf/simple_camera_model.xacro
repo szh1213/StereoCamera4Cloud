@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<robot name="simple_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <link name="world">
+      <origin xyz="0.0 0.0 0.0"/>  
+  </link>
+  
+  <joint name="camera_joint" type="fixed">
+      <parent link="world"/>
+      <child link="camera_link"/>
+      <origin rpy="0.0 1.5708 1.5708" xyz="0 0.0 0.5"/>   rpy这样设置 垂直向下拍摄  xyz 这样设置 高度0.5m
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.01 0.01"/>  这个 尺寸 大小 无所谓
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="10" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- camera simulator plug-in -->
+  <gazebo reference="camera_link">    加载 相机 的 插件  下面 配置相机参数
+    <sensor type="camera" name="camera">
+      <update_rate>30.0</update_rate>
+      <camera name="camera">
+        <horizontal_fov>0.6</horizontal_fov>   相机 水平视场角
+        <image>
+          <width>640</width>  像素宽度  u
+          <height>480</height> 像素高度 v
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.005</near>    最近拍摄距离
+          <far>0.9</far>  最远拍摄距离
+        </clip>
+        <noise>   // 相机噪声
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.000</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>simple_camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link</frameName>、
+        后面需要 看看 求 得的 和这里一致不 一致   应该 会 差些  更 该 这里值 再看看
+        <distortionK1>0.0</distortionK1>   这里的畸变参数均设置为 0   K是 横向畸变参数  
+        <distortionK2>0.0</distortionK2>   这里的畸变参数均设置为 0  
+        <distortionK3>0.0</distortionK3>   这里的畸变参数均设置为 0  
+        <distortionT1>0.0</distortionT1>   这里的畸变参数均设置为 0  T是 切向畸变参数
+        <distortionT2>0.0</distortionT2>   这里的畸变参数均设置为 0  
+      </plugin>
+    </sensor>
+  </gazebo>  
+  
+</robot>
+

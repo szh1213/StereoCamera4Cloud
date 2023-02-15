@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- 运行gazebo仿真环境 -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find camera4cloud)/worlds/cloud.world"/>
+    </include>
+
+    <group ns="camera1">
+        <!-- 加载机器人模型描述参数 -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find camera4cloud)/urdf/camera.xacro'" /> 
+
+        <!-- 运行joint_state_publisher节点，发布机器人的关节状态 -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+        <!-- 运行robot_state_publisher节点，发布tf  -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+        <!-- 在gazebo中加载机器人模型-->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+              args="-urdf -x 0 -y -10 -z .6 -Y 3.14159 -model camera1 -param robot_description"/> 
+    </group>
+
+
+    <group ns="camera2">
+        <!-- 加载机器人模型描述参数 -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find camera4cloud)/urdf/camera.xacro'" /> 
+
+        <!-- 运行joint_state_publisher节点，发布机器人的关节状态  -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+        <!-- 运行robot_state_publisher节点，发布tf  -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+        <!-- 在gazebo中加载机器人模型-->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+              args="-urdf -x 0 -y 10 -z .6 -Y 3.14159 -model camera2 -param robot_description"/> 
+    </group>
+
+    <group ns="center">
+        <!-- 加载机器人模型描述参数 -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find camera4cloud)/urdf/camera1.xacro'" /> 
+
+        <!-- 运行joint_state_publisher节点，发布机器人的关节状态  -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+        <!-- 运行robot_state_publisher节点，发布tf  -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+        <!-- 在gazebo中加载机器人模型-->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+              args="-urdf -x 0 -y 0 -z .6 -Y 3.14159 -model center -param robot_description"/> 
+    </group>
+
+    <node name="smallBoard" pkg="gazebo_ros" type="spawn_model" args="-file $(find camera4cloud)/urdf/checkerboard.sdf -sdf -model smallBoard -x 0 -y 0 -z 2000" />
+   <!--  <node name="bigBoard" pkg="gazebo_ros" type="spawn_model" args="-file $(find camera4cloud)/urdf/bigCheckerBoard.sdf -sdf -model bigBoard -x 0 -y 0 -z 2000" /> -->
+    <!-- <node name="blockSky" pkg="gazebo_ros" type="spawn_model" args="-file $(find camera4cloud)/urdf/sky.sdf -sdf -model blockSky -x 0 -y 0 -z 0" /> -->
+
+    <node name="steam" pkg="gazebo_ros" type="spawn_model" args="-file $(find camera4cloud)/urdf/steam.sdf -sdf -model steam -x -3 -y 0 -z 200" />
+
+    <node name="lowCloud" pkg="gazebo_ros" type="spawn_model" args="-file $(find camera4cloud)/urdf/lowCloud.sdf -sdf -model lowCloud -x -300 -y 0 -z 1000" />
+
+    <node name="middleCloud" pkg="gazebo_ros" type="spawn_model" args="-file $(find camera4cloud)/urdf/middleCloud.sdf -sdf -model middleCloud -x 500 -y 0 -z 2000" />
+
+    <node name="highCloud" pkg="gazebo_ros" type="spawn_model" args="-file $(find camera4cloud)/urdf/highCloud.sdf -sdf -model highCloud -x -50 -y 0 -z 7000" />
+
+
+</launch>

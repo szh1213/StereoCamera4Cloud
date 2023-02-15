@@ -1,0 +1,12 @@
+<?xml version = "1.0"?>
+<launch>
+    <!-- If you already have rectified camera images remove the image_proc nodes -->
+    <group ns="camera1/cam">
+        <node name="left_rect" pkg="image_proc" type="image_proc"/>
+    </group>
+    
+    <group ns="camera2/cam">
+        <node name="right_rect" pkg="image_proc" type="image_proc"/>
+    </group>
+ 
+</launch>
